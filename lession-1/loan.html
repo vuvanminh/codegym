@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tính lãi suất ngân hàng :( - Minhvv</title>
+</head>
+<body>
+
+<div class="container">
+	<h1>Tính khoản vay ngân hàng</h1>
+
+	<div class="group">
+		<label for="money">Số tiền vay</label>
+		<input type="number" name="money" id="money" class="money" value="" placeholder="1000000" />
+	</div>
+
+	<div class="group">
+		<label for="rate">Lãi suất (năm)</label>
+		<input type="number" name="rate" id="rate" class="rate" value="" placeholder="8" />
+	</div>
+
+	<div class="group">
+		<label for="time">Thời gian trả (năm)</label>
+		<input type="number" name="time" id="time" class="time" value="" placeholder="1" />
+	</div>
+
+	<button id="btn-calculate">Tính</button>
+
+	<div id="result"></div>
+</div>
+
+<style>
+	.container{
+		width: 80%;
+		min-width:  320px;
+		max-width:  500px;
+		padding:  30px;
+		margin:  auto;
+		border:  1px solid #dedede;
+		background:  #f2f2f2;
+	}
+	.container h1{
+		display:  block;
+		text-align:  center;
+		margin: 0px 0px 30px 0px;
+	}
+	.container .group{
+		margin-bottom: 15px;
+	}
+	.container .group > label{
+		margin-bottom:  5px;
+		display:  block;
+		width: 100%;
+	}
+	.container .group > input{
+		width:  100%;
+		padding:  10px 15px;
+		border-radius:  3px;
+		border:  1px solid #bebebe;
+		box-sizing: border-box;
+	}
+	.container .group .inline{
+		display: flex;
+    	align-items: center;
+    	width: fit-content;
+    	gap:  15px;
+	}
+	.container .group .inline label{
+		margin:  0px;
+	}
+	#btn-calculate{
+		display: block;
+	    margin: 30px auto;
+	    padding: 10px 15px;
+	    background: #2987ce;
+	    color: #fff;
+	    border: 0px;
+	    border-radius: 3px;
+	    cursor:  pointer;
+	}
+	#result .inner{
+		background: #ffffff;
+	    padding: 30px;
+	    text-align: center;
+	    border-radius: 3px;
+	    border: 1px solid #bebebe;
+	}
+</style>
+
+<script>
+	const btnCalculate = document.getElementById('btn-calculate');
+	const resultEl = document.getElementById('result');
+	const moneyEl = document.getElementById('money');
+	const rateEl = document.getElementById('rate');
+	const timeEl = document.getElementById('time');
+
+	moneyEl.addEventListener("keypress", function (e) {
+		resultEl.innerHTML = '';
+	    if (e.which != 8 && e.which != 0 && e.which < 48 || e.which > 57){
+	        e.preventDefault();
+	    }
+	});
+	rateEl.addEventListener("keypress", function (e) {
+		resultEl.innerHTML = '';
+	    if (e.which != 8 && e.which != 0 && e.which < 48 && e.which !== 46 || e.which > 57){
+	        e.preventDefault();
+	    }
+	});
+	timeEl.addEventListener("keypress", function (e) {
+		resultEl.innerHTML = '';
+	    if (e.which != 8 && e.which != 0 && e.which < 48 || e.which > 57){
+	        e.preventDefault();
+	    }
+	});
+
+	btnCalculate.addEventListener('click', bankCalculate);
+
+	function bankCalculate(){
+		var money = moneyEl.value;
+		var rate = rateEl.value;
+		var time = timeEl.value;
+
+		var interest = (rate/100)/12;
+		var timeToMonth = time*12;
+		var x = Math.pow(1 + interest, timeToMonth);
+		var monthlyPayment = Math.round(money * interest / (1 - 1 / x),0);
+
+        var totalPayment = monthlyPayment * timeToMonth;
+        var totalFee = totalPayment - money;
+
+        var resultHtml = '';
+        resultHtml += '<div>Số tiền phải trả hàng tháng: '+monthlyPayment+'</div>';
+        resultHtml += '<div>Tổng tiền phải trả (tiền vay + lãi): '+totalPayment+'</div>';
+        resultHtml += '<div>Tổng tiền lãi: '+totalFee+'</div>';
+
+		resultEl.innerHTML = '<div class="inner"><h2>Kết Quả</h2><div>'+ resultHtml +'</div>';
+	}
+</script>
+
+</body>
+</html>

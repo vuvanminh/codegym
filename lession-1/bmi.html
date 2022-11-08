@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Đo Chỉ Số (BMI) - Minhvv</title>
+</head>
+<body>
+
+<div class="container">
+	<h1>Đo Chỉ Số (BMI)</h1>
+
+	<div class="group">
+		<label for="height">Chiều cao</label>
+		<input type="number" name="height" id="height" class="number" value="" placeholder="1.78" />
+	</div>
+
+	<div class="group">
+		<label for="weight">Cân nặng</label>
+		<input type="number" name="weight" id="weight" class="number" value="" placeholder="82" />
+	</div>
+
+	<div class="group">
+		<label>Giới tính</label>
+		<div class="inline">
+			<span>
+				<input checked type="radio" name="gender" id="male" value="male">
+				<label for="male">Nam</label>
+			</span>
+			<span>
+				<input type="radio" name="gender" id="female" value="female">
+				<label for="female">Nữ</label>
+			</span>
+		</div>
+	</div>
+
+	<button id="btn-calculate">Tính BMI</button>
+
+	<div id="result"></div>
+</div>
+
+<style>
+	.container{
+		width: 80%;
+		min-width:  320px;
+		max-width:  500px;
+		padding:  30px;
+		margin:  auto;
+		border:  1px solid #dedede;
+		background:  #f2f2f2;
+	}
+	.container h1{
+		display:  block;
+		text-align:  center;
+		margin: 0px 0px 30px 0px;
+	}
+	.container .group{
+		margin-bottom: 15px;
+	}
+	.container .group > label{
+		margin-bottom:  5px;
+		display:  block;
+		width: 100%;
+	}
+	.container .group > input{
+		width:  100%;
+		padding:  10px 15px;
+		border-radius:  3px;
+		border:  1px solid #bebebe;
+		box-sizing: border-box;
+	}
+	.container .group .inline{
+		display: flex;
+    	align-items: center;
+    	width: fit-content;
+    	gap:  15px;
+	}
+	.container .group .inline label{
+		margin:  0px;
+	}
+	#btn-calculate{
+		display: block;
+	    margin: 30px auto;
+	    padding: 10px 15px;
+	    background: #2987ce;
+	    color: #fff;
+	    border: 0px;
+	    border-radius: 3px;
+	    cursor:  pointer;
+	}
+	#result .inner{
+		background: #ffffff;
+	    padding: 30px;
+	    text-align: center;
+	    border-radius: 3px;
+	    border: 1px solid #bebebe;
+	}
+</style>
+
+<script>
+	const btnCalculate = document.getElementById('btn-calculate');
+	const resultEl = document.getElementById('result');
+	const heightEl = document.getElementById('height');
+	const weightEl = document.getElementById('weight');
+
+	heightEl.addEventListener("keypress", function (e) {
+		resultEl.innerHTML = '';
+	    if (e.which != 8 && e.which != 0 && e.which < 48 && e.which !== 46 || e.which > 57){
+	        e.preventDefault();
+	    }
+	});
+	weightEl.addEventListener("keypress", function (e) {
+		resultEl.innerHTML = '';
+	    if (e.which != 8 && e.which != 0 && e.which < 48 && e.which !== 46 || e.which > 57){
+	        e.preventDefault();
+	    }
+	});
+
+	btnCalculate.addEventListener('click', bmiCalculate);
+
+	function bmiCalculate(){
+		var height = heightEl.value;
+		var weight = weightEl.value;
+		var gender = document.querySelector('input[name=gender]:checked').value;
+		var bmi = Math.floor((weight / (height * height))*10)/10;
+
+		var status = '';
+		if(gender == 'male'){
+			if(bmi < 20.7){
+				status = 'Gầy';
+			}else if(bmi < 26.4){
+				status = 'Bình thường';
+			}else if(bmi < 27.8){
+				status = 'Thừa cân nhẹ';
+			}else if(bmi < 31.1){
+				status = 'Trên lý tưởng';
+			}else{
+				status = 'Béo phù';
+			}
+		}else{
+			if(bmi < 19.1){
+				status = 'Gầy';
+			}else if(bmi < 25.8){
+				status = 'Bình thường';
+			}else if(bmi < 27.3){
+				status = 'Thừa cân nhẹ';
+			}else if(bmi < 32.3){
+				status = 'Trên lý tưởng';
+			}else{
+				status = 'Béo phù';
+			}
+		}
+
+		if(!isNaN(bmi)){
+			resultEl.innerHTML = '<div class="inner"><h2>Kết Quả</h2><div>'+ bmi +' | '+ status +'</div>';
+		}else{
+			resultEl.innerHTML = '<div class="inner">Dữ liệu sai</div>';
+		}
+	}
+</script>
+
+</body>
+</html>
